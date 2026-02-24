@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Cómo construir un software seguro?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .booklet-page {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .toc-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .toc-link:hover {
+            padding-left: 0.5rem;
+            color: #059669; /* Emerald 600 - Guiño sutil a colores institucionales */
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <!-- Navegación lateral / Índice -->
+    <div class="fixed hidden lg:block w-64 h-screen bg-white shadow-lg p-6 overflow-y-auto z-10">
+        <div class="flex items-center gap-3 mb-8 text-emerald-700">
+            <i class="fas fa-shield-alt text-3xl"></i>
+            <h2 class="font-bold text-xl leading-tight">Cartilla Digital<br>Guía</h2>
+        </div>
+        <h3 class="font-semibold text-slate-500 uppercase text-xs tracking-wider mb-4">Contenido</h3>
+        <ul class="space-y-3 text-sm font-medium text-slate-600">
+            <li><a href="#intro" class="toc-link block"><i class="fas fa-info-circle w-5"></i> 1. Introducción</a></li>
+            <li><a href="#fases" class="toc-link block"><i class="fas fa-layer-group w-5"></i> 2. Fases del Desarrollo Seguro</a></li>
+            <li><a href="#politicas" class="toc-link block"><i class="fas fa-file-contract w-5"></i> 3. Políticas y Estándares</a></li>
+            <li><a href="#caso" class="toc-link block"><i class="fas fa-laptop-code w-5"></i> 4. Caso Práctico (E-commerce)</a></li>
+            <li><a href="#analisis" class="toc-link block"><i class="fas fa-search w-5"></i> 5. Análisis SAST y DAST</a></li>
+            <li><a href="#preguntas" class="toc-link block text-emerald-600"><i class="fas fa-question-circle w-5"></i> 6. Preguntas Clave</a></li>
+            <li><a href="#bibliografia" class="toc-link block"><i class="fas fa-book w-5"></i> 7. Bibliografía</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="lg:ml-64 p-4 sm:p-8 md:p-12 max-w-5xl mx-auto">
+        
+        <!-- Portada -->
+        <header class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-10 md:p-16 text-white mb-12 booklet-page relative overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 text-white/5 text-9xl">
+                <i class="fas fa-lock"></i>
+            </div>
+            <span class="bg-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Actividad Semana 7</span>
+            <h1 class="text-4xl md:text-5xl font-bold mt-6 mb-4 leading-tight">
+                ¿Cómo construir un <br><span class="text-emerald-400">Software Seguro?</span>
+            </h1>
+            <p class="text-lg text-slate-300 max-w-2xl mb-8">
+                Guía técnica para la integración de prácticas de seguridad en el ciclo de vida del desarrollo de software (SSDLC), enfocada en automatización, estándares y análisis de vulnerabilidades.
+            </p>
+            
+            <!-- Datos Académicos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300 border-t border-slate-700 pt-8 mt-4 bg-slate-800/50 p-6 rounded-xl">
+                <div class="space-y-2">
+                    <p><i class="fas fa-user-graduate w-5 text-emerald-500"></i> <strong class="text-white">Autor:</strong> Washington Nieto Arce</p>
+                    <p><i class="fas fa-chalkboard-teacher w-5 text-emerald-500"></i> <strong class="text-white">Profesor:</strong> Ing. Juan Carlos Valencia</p>
+                    <p><i class="far fa-calendar-alt w-5 text-emerald-500"></i> <strong class="text-white">Fecha:</strong> Febrero 24 de 2026</p>
+                </div>
+                <div class="space-y-2">
+                    <p><i class="fas fa-university w-5 text-emerald-500"></i> <strong class="text-white">Institución:</strong> UNIMINUTO – Corporación Universitaria Minuto de Dios</p>
+                    <p><i class="fas fa-laptop-code w-5 text-emerald-500"></i> <strong class="text-white">Programa:</strong> Especialización en Desarrollo de Software</p>
+                    <p><i class="fas fa-shield-alt w-5 text-emerald-500"></i> <strong class="text-white">Curso:</strong> NRC-103-Seguridad en el Desarrollo de Software</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 1. Introducción -->
+        <section id="intro" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">1. Introducción</h2>
+            <div class="bg-white rounded-xl p-8 booklet-page">
+                <p class="mb-4">
+                    La construcción de software seguro ya no es una fase aislada que ocurre al final del desarrollo; es un proceso continuo que debe integrarse desde la concepción de la idea. El modelo <strong>DevSecOps</strong> y la filosofía <em>Shift-Left</em> (mover la seguridad a la izquierda del ciclo) son fundamentales para identificar y mitigar vulnerabilidades tempranamente, reduciendo costos y riesgos.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded text-blue-800 text-sm">
+                    <strong>Objetivo de esta cartilla:</strong> Establecer pautas para la definición de políticas de seguridad mediante técnicas seguras de construcción, aplicando estándares de la industria y ejecutando análisis estáticos y dinámicos centrados en el proceso de compilación y las dependencias.
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Fases del Desarrollo Seguro -->
+        <section id="fases" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">2. Fases del Desarrollo Seguro (SSDLC)</h2>
+            <img src="./img/7fases_SDLC_infografia.jpg" alt="">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tarjeta Fase -->
+                 
+                <div class="bg-white rounded-xl p-6 booklet-page border-t-4 border-slate-300 hover:border-emerald-500 transition-colors">
+                    <div class="flex items-center gap-3 mb-3 text-emerald-600">
+                        <i class="fas fa-clipboard-list text-xl"></i>
+                        <h3 class="font-bold text-lg text-slate-800">1. Requisitos y Diseño</h3>
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        Identificación de requisitos de seguridad (confidencialidad, integridad, disponibilidad). Ejecución de <strong>Modelado de Amenazas</strong> para anticipar vectores de ataque antes de escribir una línea de código.
+                    </p>
+                </div>
+                <!-- Tarjeta Fase -->
+                <div class="bg-white rounded-xl p-6 booklet-page border-t-4 border-slate-300 hover:border-emerald-500 transition-colors">
+                    <div class="flex items-center gap-3 mb-3 text-emerald-600">
+                        <i class="fas fa-code text-xl"></i>
+                        <h3 class="font-bold text-lg text-slate-800">2. Construcción (Codificación)</h3>
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        Aplicación de guías de codificación segura (ej. evitar inyecciones SQL, XSS). Validación estricta de entradas y gestión segura de sesiones. <em>(Ortega, 2018)</em>
+                    </p>
+                </div>
+                <!-- Tarjeta Fase -->
+                <div class="bg-white rounded-xl p-6 booklet-page border-t-4 border-slate-300 hover:border-emerald-500 transition-colors">
+                    <div class="flex items-center gap-3 mb-3 text-emerald-600">
+                        <i class="fas fa-vial text-xl"></i>
+                        <h3 class="font-bold text-lg text-slate-800">3. Pruebas y Compilación</h3>
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        Integración Continua (CI). Análisis estático (SAST), Análisis de dependencias (SCA) y Análisis dinámico (DAST) automatizados en el pipeline de construcción.
+                    </p>
+                </div>
+                <!-- Tarjeta Fase -->
+                <div class="bg-white rounded-xl p-6 booklet-page border-t-4 border-slate-300 hover:border-emerald-500 transition-colors">
+                    <div class="flex items-center gap-3 mb-3 text-emerald-600">
+                        <i class="fas fa-rocket text-xl"></i>
+                        <h3 class="font-bold text-lg text-slate-800">4. Despliegue y Operación</h3>
+                    </div>
+                    <p class="text-sm text-slate-600">
+                        Despliegue automatizado seguro (CD). Infraestructura como código (IaC) validada y monitoreo continuo de seguridad en producción.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Políticas y Estándares -->
+        <section id="politicas" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">3. Políticas y Estándares de Seguridad</h2>
+            <img src="./img/politica-seguridad-informatica.jpeg" alt="">
+
+            <div class="bg-white rounded-xl p-8 booklet-page">
+                <p class="mb-4">Para garantizar la seguridad sistémica, es imperativo basarse en marcos de trabajo reconocidos:</p>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                        <i class="fas fa-project-diagram text-emerald-600"></i> Modelo SAMM (Software Assurance Maturity Model)
+                    </h3>
+                    <p class="text-slate-600 mb-2">Según SAMM, la seguridad debe ser medible y evolutiva. Define prácticas de seguridad en 5 funciones de negocio:</p>
+                    <ul class="list-disc list-inside text-sm text-slate-700 space-y-1 ml-4">
+                        <li><strong>Gobernanza:</strong> Estrategia, métricas y educación.</li>
+                        <li><strong>Diseño:</strong> Modelado de amenazas y requisitos de seguridad.</li>
+                        <li><strong>Implementación:</strong> Construcción segura, despliegue seguro.</li>
+                        <li><strong>Verificación:</strong> Revisiones de arquitectura, pruebas basadas en requisitos.</li>
+                        <li><strong>Operaciones:</strong> Gestión de incidentes y del entorno.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                        <i class="fab fa-java text-emerald-600"></i> Programación Segura (Ortega, 2018)
+                    </h3>
+                    <p class="text-slate-600 text-sm">
+                        En aplicaciones, especialmente web y de comercio electrónico (como en Java), Ortega enfatiza que los mayores vectores de ataque provienen de datos no confiables. Se deben aplicar políticas como: Validación estricta en el lado del servidor, uso de sentencias preparadas (Prepared Statements) y cifrado robusto para datos en tránsito y reposo.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Caso Práctico -->
+        <section id="caso" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">4. Caso Práctico: E-Commerce Seguro</h2>
+            <div class="bg-slate-800 rounded-xl p-8 booklet-page text-white relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4 text-emerald-400">Contexto: Desarrollo de una Tienda en Línea</h3>
+                <p class="mb-6 text-slate-300">
+                    Se requiere construir una aplicación web transaccional. Aplicaremos los principios de SAMM y Ortega (2018) centrándonos en el proceso de compilación y dependencias.
+                </p>
+
+                <div class="space-y-6">
+                    <div class="bg-slate-700/50 p-5 rounded-lg border border-slate-600">
+                        <h4 class="font-bold text-emerald-300 mb-2"><i class="fas fa-boxes"></i> 1. Gestión de Dependencias (SCA)</h4>
+                        <p class="text-sm text-slate-300">
+                            <strong>Política:</strong> Todo artefacto debe tener un escaneo de librerías de terceros.<br>
+                            <strong>Acción:</strong> Integrar <code>OWASP Dependency-Check</code> en el archivo <code>pom.xml</code> (Maven) o <code>build.gradle</code>. Si se detecta una vulnerabilidad CVE con severidad "Alta" o "Crítica" en una librería (ej. Log4j), la compilación debe detenerse inmediatamente.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-700/50 p-5 rounded-lg border border-slate-600">
+                        <h4 class="font-bold text-emerald-300 mb-2"><i class="fas fa-code-branch"></i> 2. Pipeline de Construcción Segura</h4>
+                        <p class="text-sm text-slate-300">
+                            <strong>Política:</strong> El código no puede fusionarse a la rama principal sin validación automática.<br>
+                            <strong>Acción:</strong> Configurar GitLab CI o Jenkins para ejecutar un pipeline que incluye: Linter de seguridad, compilación, ejecución de pruebas unitarias, SAST y DAST.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Análisis SAST y DAST -->
+        <section id="analisis" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">5. Ejecución de Análisis Estáticos y Dinámicos</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- SAST -->
+                <div class="bg-white rounded-xl p-6 booklet-page border-l-4 border-blue-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Análisis Estático (SAST)</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Conocido como pruebas de <em>caja blanca</em>. Analiza el código fuente o los binarios sin ejecutar la aplicación para encontrar vulnerabilidades (ej. credenciales hardcodeadas, inyecciones).
+                    </p>
+                    <div class="bg-slate-100 p-3 rounded text-sm text-slate-700 font-mono">
+                        <strong>Herramienta sugerida:</strong> SonarQube<br>
+                        <strong>Ejecución en pipeline:</strong><br>
+                        <code>mvn clean verify sonar:sonar -Dsonar.qualitygate.wait=true</code>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">
+                        * Esperar el Quality Gate asegura que si no cumple las políticas, la tarea falla.
+                    </p>
+                </div>
+
+                <!-- DAST -->
+                <div class="bg-white rounded-xl p-6 booklet-page border-l-4 border-orange-500">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3">Análisis Dinámico (DAST)</h3>
+                    <p class="text-sm text-slate-600 mb-4">
+                        Conocido como pruebas de <em>caja negra</em>. Analiza la aplicación en ejecución (en un entorno de staging) simulando ataques externos para detectar fallos como mala configuración de cabeceras o XSS reflejado.
+                    </p>
+                    <div class="bg-slate-100 p-3 rounded text-sm text-slate-700 font-mono">
+                        <strong>Herramienta sugerida:</strong> OWASP ZAP<br>
+                        <strong>Ejecución en pipeline:</strong><br>
+                        <code>docker run -t owasp/zap2docker-stable zap-baseline.py -t https://staging-ecommerce.local</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Respuestas a Preguntas Clave -->
+        <section id="preguntas" class="mb-12 scroll-mt-12">
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b-2 border-emerald-500 pb-2 inline-block">6. Respuestas a Preguntas Clave</h2>
+            
+            <!-- Pregunta 1 -->
+            <div class="bg-white rounded-xl p-8 booklet-page mb-6 ring-2 ring-emerald-500/20">
+                <h3 class="text-xl font-bold text-emerald-700 mb-4 flex items-start gap-3">
+                    <i class="fas fa-question-circle mt-1"></i>
+                    ¿Por qué es importante automatizar el proceso de construcción o codificación del software y asegurar las herramientas usadas?
+                </h3>
+                <div class="text-slate-700 space-y-3 text-sm md:text-base">
+                    <p>
+                        <strong>1. Eliminación del factor humano y garantía de repetibilidad:</strong> La automatización garantiza que las mismas reglas de seguridad se apliquen sistemáticamente a cada línea de código. Un proceso manual es propenso a olvidos o atajos bajo presión de tiempo. Al automatizar (CI/CD), aseguramos que las validaciones de seguridad sean ineludibles e idénticas en cada ejecución.
+                    </p>
+                    <p>
+                        <strong>2. Prevención de ataques a la cadena de suministro (Supply Chain Attacks):</strong> Asegurar las herramientas de construcción (como Jenkins, repositorios de código, servidores de artefactos) es vital. Si un atacante compromete el servidor de CI/CD, puede inyectar código malicioso directamente en los artefactos compilados sin tocar el código fuente original (como ocurrió en el caso de SolarWinds).
+                    </p>
+                    <p>
+                        <strong>3. Trazabilidad absoluta:</strong> Un proceso automatizado y asegurado genera logs inmutables que permiten auditar qué versión de código se compiló, con qué dependencias y qué resultados de seguridad obtuvo, fundamental para auditorías (SAMM).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="bg-white rounded-xl p-8 booklet-page ring-2 ring-emerald-500/20">
+                <h3 class="text-xl font-bold text-emerald-700 mb-4 flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle mt-1"></i>
+                    ¿Qué impacto tiene el definir comprobaciones de seguridad obligatorias en el proceso de compilación y asegurarse de que falla en la creación de artefactos que no cumplen?
+                </h3>
+                <div class="text-slate-700 space-y-3 text-sm md:text-base">
+                    <p>
+                        <strong>1. Implementación real del paradigma "Shift-Left":</strong> Romper la compilación (<em>Break the build</em>) cuando hay fallos de seguridad obliga a los desarrolladores a enfrentar y corregir las vulnerabilidades de manera inmediata, en lugar de relegarlas a un backlog de deuda técnica que rara vez se aborda.
+                    </p>
+                    <p>
+                        <strong>2. Protección del entorno de producción:</strong> Define un umbral de calidad estricto (<em>Quality Gate</em>). Al fallar la creación del artefacto, se neutraliza físicamente la posibilidad de que código vulnerable sea promovido y desplegado en servidores de producción. Es el control preventivo definitivo.
+                    </p>
+                    <p>
+                        <strong>3. Cambio cultural en el equipo:</strong> Como instructor y líder técnico, sabes que la cultura lo es todo. Cuando una librería insegura o una inyección SQL introducida por un desarrollador detiene el pipeline de todo el equipo, la seguridad deja de ser "el problema del equipo de seguridad" y se convierte en una responsabilidad compartida e inmediata del equipo de desarrollo, alineándose con las metodologías de Gobernanza y Verificación del modelo SAMM y las prácticas citadas por Ortega (2018).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. Bibliografía -->
+        <section id="bibliografia" class="mb-12 scroll-mt-12">
+            <h2 class="text-2xl font-bold text-slate-800 mb-4 inline-block border-b-2 border-slate-300 pb-1">7. Bibliografía de Referencia</h2>
+            <div class="bg-slate-100 rounded-xl p-6 booklet-page text-sm text-slate-600">
+                <ul class="space-y-4">
+                    <li class="flex gap-3">
+                        <i class="fas fa-book-open text-slate-400 mt-1"></i>
+                        <p>Ortega, J. (2018). Programación segura en aplicaciones de comercio electrónico. En: <em>Seguridad en aplicaciones Web Java</em> (pp. 62-94) [versión electrónica]. RA-MA Editorial.</p>
+                    </li>
+                    <li class="flex gap-3">
+                        <i class="fas fa-globe text-slate-400 mt-1"></i>
+                        <p>OWASP. (s. f). <em>SAMM model overview</em>. Software Assurance Maturity Model (SAMM). Recuperado de las guías oficiales de OWASP.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="text-center text-slate-500 text-sm mt-16 mb-8 border-t border-slate-200 pt-8">
+            <p>Elaborado por <strong>Washington Nieto Arce</strong> <br>
+            UNIMINUTO – Corporación Universitaria Minuto de Dios <br>
+            Especialización en Desarrollo de Software</p>
+        </footer>
+
+    </main>
+
+    <!-- Script suave para navegación -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
